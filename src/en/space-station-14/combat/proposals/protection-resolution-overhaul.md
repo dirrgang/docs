@@ -63,14 +63,13 @@ I've been a big fan of Rimworld and its Combat Extended mod, and how it seems to
 
 For mechanical attacks, the game would first determine how the attack interacts with the target's protection. Only the result of that interaction is then converted into damage types used by medical, species and other system.
 
-The currently proposed model consists of three attributes:
-- Perforation describes localized puncture or penetration, such as bullets or pointed thrusts.
-- Cut describes edge-driven cutting, such as with knives, swords or axes.
-- Impact describes the mechanical force transmitted, including blunt attacks and trauma caused when armor prevents a penetrating attack.
+The currently proposed model consists of two attributes:
+- **Breach** describes the capability to defeat a protective layer sufficiently to carry a wound inward.
+- **Impact** describes the cpability to transmit mechanical loading through protection without requiring Breach and ultimately cause blunt trauma.
 
-These are intentionally abstract, intended for easier comparison. A given amount of "Perforation Power" should have the same meaning regardless whether it comes from a firearm, spear or other source.
+These are intentionally abstract, intended for easier comparison. A given amount of "Breach Power" should have the same meaning regardless whether it comes from a firearm, spear or other source.
 
-Protection provides corresponding resistance values. This allows different armor to specialize for different types of damage protection. Projectile-oriented armor could have a high Perforation resistance, while riot armor may favour Cut and Impact resistance.
+Protection provides corresponding resistance values. This allows different armor to specialize for different types of damage protection. Projectile-oriented armor could have a high Breach resistance, while riot armor may favour Impact resistance.
 
 ### Sequential Layers
 
@@ -78,7 +77,7 @@ Protection is calculated through ordered layers. Each layer reduces the remainin
 
 ### Partial penetration and stopped attacks
 
-Penetration is not binary. When a layer absorbs part of an attack's Perforation or Cut capability, the remaining portion continues inward. When the protection absorbs penetrating capability, the corresponding portion fo the attack's coupled Impact becomes active at that layer, and is reduced by that layer's Impact Resistance.
+Penetration is not binary. When a layer absorbs part of an attack's Breach capability, the remaining portion continues inward. When the protection absorbs penetrating capability, the corresponding portion fo the attack's coupled Impact becomes active at that layer, and is reduced by that layer's Impact Resistance.
 
 This would result in three desireable results without having to implement three seperate mechanics:
 
@@ -123,7 +122,7 @@ No intended impact. It might influence some SOPs.
 
 # Technical Considerations
 
-The implementation uses a shared mechanical-protection resolver that can be called by different attack sources, rather than being projectile-specific. Attacks need to provide a small profile containing their perforation or cut capability, Impact behavior and the resulting DamageSpecifier that remains after the resolution. Mechanical protection sources correspondingly provide Perforation, Cut and Impact resistance.
+The implementation uses a shared mechanical-protection resolver that can be called by different attack sources, rather than being projectile-specific. Attacks need to provide a small profile containing their breach capability, Impact behavior and the resulting DamageSpecifier that remains after the resolution. Mechanical protection sources correspondingly provide Breach and Impact resistance.
 
 Applicable protection layers must be collected in a deterministic order.
 
